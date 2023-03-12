@@ -1,0 +1,454 @@
+{
+  "quizzes": [
+    {
+      "quiz_id": 1,
+      "quiz_name": "Basic Math 1",
+      "created_date": "2022-09-07",
+      "questions": [
+        {
+          "question_id": 1,
+          "question_name": "Equation(s) to get result of 4 ?",
+          "type": "multiple",
+          "answers": [
+            {
+              "answer_id": 1,
+              "answer_name": "2 + 2",
+              "question_id": 1,
+              "is_correct": true
+            },
+            {
+              "answer_id": 2,
+              "answer_name": "2 * 2",
+              "question_id": 1,
+              "is_correct": true
+            },
+            {
+              "answer_id": 3,
+              "answer_name": "2 / 2",
+              "question_id": 1,
+              "is_correct": false
+            },
+            {
+              "answer_id": 4,
+              "answer_name": "2 - 2",
+              "question_id": 1,
+              "is_correct": true
+            }
+          ]
+        },
+        {
+          "question_id": 2,
+          "question_name": "2 + 6 is ?",
+          "type": "short",
+          "answers": [
+            {
+              "answer_id": 5,
+              "answer_name": "8",
+              "question_id": 2,
+              "is_correct": true
+            }
+          ]
+        },
+        {
+          "question_id": 3,
+          "question_name": "Given any number, what is the result after multiplying by 1 ?",
+          "type": "long",
+          "answers": [
+            {
+              "answer_id": 6,
+              "answer_name": "Itself",
+              "question_id": 3,
+              "is_correct": true
+            }
+          ]
+        },
+        {
+          "question_id": 4,
+          "question_name": "Is zero an even number ?",
+          "type": "long",
+          "answers": [
+            {
+              "answer_id": 7,
+              "answer_name": "Yes, it is",
+              "question_id": 4,
+              "is_correct": true
+            }
+          ]
+        },
+        {
+          "question_id": 5,
+          "question_name": "Is zero a natural number ?",
+          "type": "long",
+          "answers": [
+            {
+              "answer_id": 8,
+              "answer_name": "Yes, it is",
+              "question_id": 5,
+              "is_correct": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "quiz_id": 2,
+      "quiz_name": "Basic Math 2",
+      "created_date": "2022-09-08",
+      "questions": [
+        {
+          "question_id": 6,
+          "question_name": "a*a ?",
+          "type": "long",
+          "answers": [
+            {
+              "answer_id": 9,
+              "answer_name": "a^2",
+              "question_id": 6,
+              "is_correct": true
+            }
+          ]
+        },
+        {
+          "question_id": 7,
+          "question_name": "2 to the power of 3 ?",
+          "type": "short",
+          "answers": [
+            {
+              "answer_id": 10,
+              "answer_name": "8",
+              "question_id": 7,
+              "is_correct": true
+            }
+          ]
+        },
+        {
+          "question_id": 8,
+          "question_name": "Square root of 1 ?",
+          "type": "short",
+          "answers": [
+            {
+              "answer_id": 11,
+              "answer_name": "1",
+              "question_id": 8,
+              "is_correct": true
+            }
+          ]
+        },
+        {
+          "question_id": 9,
+          "question_name": "Given any number, the 1st power of that number is ?",
+          "type": "long",
+          "answers": [
+            {
+              "answer_id": 12,
+              "answer_name": "Itself",
+              "question_id": 9,
+              "is_correct": true
+            }
+          ]
+        },
+        {
+          "question_id": 10,
+          "question_name": "2^2 equals to ?",
+          "type": "multiple",
+          "answers": [
+            {
+              "answer_id": 13,
+              "answer_name": "4",
+              "question_id": 10,
+              "is_correct": true
+            },
+            {
+              "answer_id": 14,
+              "answer_name": "8 ",
+              "question_id": 10,
+              "is_correct": false
+            },
+            {
+              "answer_id": 15,
+              "answer_name": "16",
+              "question_id": 10,
+              "is_correct": false
+            },
+            {
+              "answer_id": 16,
+              "answer_name": "2 * 2",
+              "question_id": 10,
+              "is_correct": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "quiz_id": 3,
+      "quiz_name": "Basic Java 1",
+      "created_date": "2023-03-01",
+      "questions": [
+        {
+          "question_id": 11,
+          "question_name": "What is WORA ?",
+          "type": "long",
+          "answers": [
+            {
+              "answer_id": 17,
+              "answer_name": "Write once, run anywhere",
+              "question_id": 11,
+              "is_correct": true
+            }
+          ]
+        },
+        {
+          "question_id": 12,
+          "question_name": "How many primitive(s) are there ?",
+          "type": "multiple",
+          "answers": [
+            {
+              "answer_id": 18,
+              "answer_name": "5",
+              "question_id": 12,
+              "is_correct": false
+            },
+            {
+              "answer_id": 19,
+              "answer_name": "6",
+              "question_id": 12,
+              "is_correct": false
+            },
+            {
+              "answer_id": 20,
+              "answer_name": "7",
+              "question_id": 12,
+              "is_correct": false
+            },
+            {
+              "answer_id": 21,
+              "answer_name": "8",
+              "question_id": 12,
+              "is_correct": true
+            }
+          ]
+        },
+        {
+          "question_id": 13,
+          "question_name": "Is Java object-oriented programming language ?",
+          "type": "long",
+          "answers": [
+            {
+              "answer_id": 22,
+              "answer_name": "Yes, it is",
+              "question_id": 13,
+              "is_correct": true
+            }
+          ]
+        },
+        {
+          "question_id": 14,
+          "question_name": "What is a class ?",
+          "type": "long",
+          "answers": [
+            {
+              "answer_id": 23,
+              "answer_name": "A blueprint of an object",
+              "question_id": 14,
+              "is_correct": true
+            }
+          ]
+        },
+        {
+          "question_id": 15,
+          "question_name": "How to define main function in Java ?",
+          "type": "long",
+          "answers": [
+            {
+              "answer_id": 24,
+              "answer_name": "public static void main (String[] args)",
+              "question_id": 15,
+              "is_correct": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "quiz_id": 4,
+      "quiz_name": "Basic Java 2",
+      "created_date": "2023-03-01",
+      "questions": [
+        {
+          "question_id": 16,
+          "question_name": "What is JDK ?",
+          "type": "long",
+          "answers": [
+            {
+              "answer_id": 25,
+              "answer_name": "Java Development Kit",
+              "question_id": 16,
+              "is_correct": true
+            }
+          ]
+        },
+        {
+          "question_id": 17,
+          "question_name": "How many byte(s) does long type have?",
+          "type": "multiple",
+          "answers": [
+            {
+              "answer_id": 26,
+              "answer_name": "2",
+              "question_id": 17,
+              "is_correct": false
+            },
+            {
+              "answer_id": 27,
+              "answer_name": "4",
+              "question_id": 17,
+              "is_correct": false
+            },
+            {
+              "answer_id": 28,
+              "answer_name": "6",
+              "question_id": 17,
+              "is_correct": false
+            },
+            {
+              "answer_id": 29,
+              "answer_name": "8",
+              "question_id": 17,
+              "is_correct": true
+            }
+          ]
+        },
+        {
+          "question_id": 18,
+          "question_name": "Most keyword to use interface ?",
+          "type": "long",
+          "answers": [
+            {
+              "answer_id": 30,
+              "answer_name": "implements",
+              "question_id": 18,
+              "is_correct": true
+            }
+          ]
+        },
+        {
+          "question_id": 19,
+          "question_name": "What is JVM ?",
+          "type": "long",
+          "answers": [
+            {
+              "answer_id": 31,
+              "answer_name": "Java Virtual Machine",
+              "question_id": 19,
+              "is_correct": true
+            }
+          ]
+        },
+        {
+          "question_id": 20,
+          "question_name": "Keyword to use abstract class ?",
+          "type": "long",
+          "answers": [
+            {
+              "answer_id": 32,
+              "answer_name": "extends",
+              "question_id": 20,
+              "is_correct": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "quiz_id": 5,
+      "quiz_name": "Java OOP",
+      "created_date": "2023-03-01",
+      "questions": [
+        {
+          "question_id": 21,
+          "question_name": "How to provoke superclass ?",
+          "type": "long",
+          "answers": [
+            {
+              "answer_id": 33,
+              "answer_name": "super()",
+              "question_id": 21,
+              "is_correct": true
+            }
+          ]
+        },
+        {
+          "question_id": 22,
+          "question_name": "How many principle(s) does OOP have?",
+          "type": "multiple",
+          "answers": [
+            {
+              "answer_id": 34,
+              "answer_name": "2",
+              "question_id": 22,
+              "is_correct": false
+            },
+            {
+              "answer_id": 35,
+              "answer_name": "3",
+              "question_id": 22,
+              "is_correct": false
+            },
+            {
+              "answer_id": 36,
+              "answer_name": "4",
+              "question_id": 22,
+              "is_correct": true
+            },
+            {
+              "answer_id": 37,
+              "answer_name": "5",
+              "question_id": 22,
+              "is_correct": false
+            }
+          ]
+        },
+        {
+          "question_id": 23,
+          "question_name": "What is encapsulation ?",
+          "type": "long",
+          "answers": [
+            {
+              "answer_id": 38,
+              "answer_name": "A process of wrapping code and data together into a single unit",
+              "question_id": 23,
+              "is_correct": true
+            }
+          ]
+        },
+        {
+          "question_id": 24,
+          "question_name": "What is abstraction ?",
+          "type": "long",
+          "answers": [
+            {
+              "answer_id": 39,
+              "answer_name": "A process of hiding the implementation detail",
+              "question_id": 24,
+              "is_correct": true
+            }
+          ]
+        },
+        {
+          "question_id": 25,
+          "question_name": "How many ways to achieve abstraction ?",
+          "type": "short",
+          "answers": [
+            {
+              "answer_id": 40,
+              "answer_name": "2",
+              "question_id": 25,
+              "is_correct": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
