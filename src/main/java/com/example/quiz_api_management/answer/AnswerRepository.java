@@ -1,4 +1,7 @@
 package com.example.quiz_api_management.answer;
 
-public interface AnswerRepository {
+import org.springframework.data.repository.CrudRepository;
+
+public interface AnswerRepository extends CrudRepository<Answer, Integer> {
+    Answer findById(int answerId);
 }

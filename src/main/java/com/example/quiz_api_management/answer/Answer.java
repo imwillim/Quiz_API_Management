@@ -1,41 +1,42 @@
 package com.example.quiz_api_management.answer;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
+import com.example.quiz_api_management.question.Question;
+import jakarta.persistence.*;
+
+import java.util.Optional;
 
 
+@Entity
+@Table (name ="answer")
 public class Answer {
     @Id
+    /*
+      Annotation SequenceGenerator is provoked for defining primary keys.
+      allocationSize is used for how many sequences in memory are allocated to the database
+     */
     @SequenceGenerator(
             name = "answer_sequence",
             sequenceName = "answer_sequence",
             allocationSize = 1
     )
 
+    /*
+      Annotation GeneratedValue is provoked for generating value of a primary key
+     */
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
             generator = "answer_sequence"
     )
 
+    @Column(name="id", unique = true)
     private int id;
+    @Column(name="name", nullable = false)
     private String name;
+    @Column(name="is_correct", nullable = false)
     private boolean isCorrect;
-    private int question_id;
-
-    public Answer(int id, String name, boolean isCorrect, int question_id) {
-        this.id = id;
-        this.name = name;
-        this.isCorrect = isCorrect;
-        this.question_id = question_id;
-    }
-
-    public Answer(String name, boolean isCorrect, int question_id) {
-        this.name = name;
-        this.isCorrect = isCorrect;
-        this.question_id = question_id;
-    }
+    @ManyToOne
+    @JoinColumn(name = "question_id", nullable = false)
+    private Question question;
 
     public int getId() {
         return id;
@@ -58,14 +59,16 @@ public class Answer {
     }
 
     public void setCorrect(boolean correct) {
-        isCorrect = correct;
+        this.isCorrect = correct;
     }
 
-    public int getQuestion_id() {
-        return question_id;
-    }
-
-    public void setQuestion_id(int question_id) {
-        this.question_id = question_id;
+    @Override
+    public String toString() {
+        return "Answer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", isCorrect=" + isCorrect +
+                ", question=" + question +
+                '}';
     }
 }
