@@ -2,12 +2,20 @@ package com.example.quiz_api_management.answer;
 
 import com.example.quiz_api_management.question.Question;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 
 @Entity
 @Table (name ="answer")
+/*
+ These annotations belong to lombok, which can generate setter and getter methods automatically
+ Moreover, it reduces verbosity of the code and avoid repetition.
+ */
+@Getter
+@Setter
 public class Answer {
     @Id
     /*
@@ -45,63 +53,16 @@ public class Answer {
     @Column(name = "updated_at", nullable = false)
     private LocalDate updatedAt;
 
-    public Answer(String name, boolean isCorrect, boolean isRemoved, Question question, LocalDate createdAt, LocalDate updatedAt) {
+    public Answer(String name, boolean isCorrect, boolean isRemoved, Question question) {
         this.name = name;
         this.isCorrect = isCorrect;
         this.isRemoved = isRemoved;
         this.question = question;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.createdAt = LocalDate.now(); // Initialized
+        this.updatedAt = LocalDate.now(); // Initialized
     }
 
     public Answer() {
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public boolean isCorrect() {
-        return isCorrect;
-    }
-
-    public void setCorrect(boolean correct) {
-        isCorrect = correct;
-    }
-
-    public boolean isRemoved() {
-        return isRemoved;
-    }
-
-    public void setRemoved(boolean removed) {
-        isRemoved = removed;
-    }
-
-    public Question getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(Question question) {
-        this.question = question;
-    }
-
-    public LocalDate getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDate createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDate getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDate updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 }
