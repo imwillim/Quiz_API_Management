@@ -3,7 +3,7 @@ package com.example.quiz_api_management.answer;
 import com.example.quiz_api_management.question.Question;
 import jakarta.persistence.*;
 
-import java.util.Optional;
+import java.time.LocalDate;
 
 
 @Entity
@@ -34,16 +34,27 @@ public class Answer {
     private String name;
     @Column(name="is_correct", nullable = false)
     private boolean isCorrect;
+    @Column(name="is_removed", nullable = false)
+    private boolean isRemoved;
     @ManyToOne
-    @JoinColumn(name = "question_id", nullable = false)
+    @JoinColumn(name = "question_id")
     private Question question;
 
-    public int getId() {
-        return id;
+    @Column(name = "created_at", nullable = false)
+    private LocalDate createdAt;
+    @Column(name = "updated_at", nullable = false)
+    private LocalDate updatedAt;
+
+    public Answer(String name, boolean isCorrect, boolean isRemoved, Question question, LocalDate createdAt, LocalDate updatedAt) {
+        this.name = name;
+        this.isCorrect = isCorrect;
+        this.isRemoved = isRemoved;
+        this.question = question;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public Answer() {
     }
 
     public String getName() {
@@ -59,16 +70,38 @@ public class Answer {
     }
 
     public void setCorrect(boolean correct) {
-        this.isCorrect = correct;
+        isCorrect = correct;
     }
 
-    @Override
-    public String toString() {
-        return "Answer{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", isCorrect=" + isCorrect +
-                ", question=" + question +
-                '}';
+    public boolean isRemoved() {
+        return isRemoved;
+    }
+
+    public void setRemoved(boolean removed) {
+        isRemoved = removed;
+    }
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
+
+    public LocalDate getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDate createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDate getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDate updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
