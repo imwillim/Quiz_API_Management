@@ -1,12 +1,10 @@
 package com.example.quiz_api_management.quiz;
 
-import com.example.quiz_api_management.question.Question;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "quiz")
@@ -28,14 +26,14 @@ public class Quiz {
     @Column(name="name", nullable = false)
     private String name;
     @Column(name = "created_at")
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
     @Column(name = "updated_at")
-    private LocalDate updatedAt;
+    private LocalDateTime updatedAt;
 
     public Quiz(String name) {
         this.name = name;
-        this.createdAt = LocalDate.now();
-        this.updatedAt = LocalDate.now();
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     public Quiz() {

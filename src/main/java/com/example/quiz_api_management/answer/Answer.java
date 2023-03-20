@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -42,24 +42,33 @@ public class Answer {
     private String name;
     @Column(name="is_correct", nullable = false)
     private boolean isCorrect;
+
+    @Transient
     @Column(name="is_removed", nullable = false)
     private boolean isRemoved;
     @ManyToOne
     @JoinColumn(name = "question_id")
+    /*
+    JsonManageReference used to avoid infinite recursion
+     */
+    // @JsonManagedReference(value = "id") - If it exists, it simply cannot create Answer.
     private Question question;
 
+    /*
+    Change LocalDate to LocalDateTime to gain full information related to time.
+     */
     @Column(name = "created_at", nullable = false)
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
     @Column(name = "updated_at", nullable = false)
-    private LocalDate updatedAt;
+    private LocalDateTime updatedAt;
 
-    public Answer(String name, boolean isCorrect, boolean isRemoved, Question question) {
+    public Answer(String name, boolean isCorrect, Question question) {
         this.name = name;
         this.isCorrect = isCorrect;
-        this.isRemoved = isRemoved;
+        this.isRemoved = false;
         this.question = question;
-        this.createdAt = LocalDate.now(); // Initialized
-        this.updatedAt = LocalDate.now(); // Initialized
+        this.createdAt = LocalDateTime.now(); // Initialized
+        this.updatedAt = LocalDateTime.now(); // Initialized
     }
 
     public Answer() {

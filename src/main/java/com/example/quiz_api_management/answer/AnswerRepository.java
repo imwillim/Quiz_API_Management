@@ -1,8 +1,11 @@
 package com.example.quiz_api_management.answer;
 
+import com.example.quiz_api_management.question.Question;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 
+import java.util.List;
 import java.util.Optional;
 
 /*
@@ -22,4 +25,7 @@ public interface AnswerRepository extends CrudRepository<Answer, Integer> {
     However, if the list of answers contain around 1 million answers, the method might not do sufficiently because it runs in linear time which is O(n)
     I just think that the shuffle method can be put in read operation in CRUD so CrudRepository is enough.
      */
+
+    @Query("SELECT ans, ans.question.id from Answer ans WHERE ans.question = ?1")
+    List<Answer> findAnswerByQuestion(Optional<Question> question);
 }
