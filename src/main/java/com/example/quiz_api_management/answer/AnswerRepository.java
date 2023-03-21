@@ -1,7 +1,6 @@
 package com.example.quiz_api_management.answer;
 
 import com.example.quiz_api_management.question.Question;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 
@@ -26,6 +25,9 @@ public interface AnswerRepository extends CrudRepository<Answer, Integer> {
     I just think that the shuffle method can be put in read operation in CRUD so CrudRepository is enough.
      */
 
-    @Query("SELECT ans, ans.question.id from Answer ans WHERE ans.question = ?1")
+
+    /*
+    No need to use query, ORM can map relationship for this method.
+     */
     List<Answer> findAnswerByQuestion(Optional<Question> question);
 }

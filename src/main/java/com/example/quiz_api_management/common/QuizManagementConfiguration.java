@@ -21,139 +21,129 @@ public class QuizManagementConfiguration {
     CommandLineRunner commandLineRunner(QuestionRepository questionRepository, AnswerRepository answerRepository, QuizRepository quizRepository) {
         return args -> {
 
-            Quiz first_quiz = new Quiz("Math 1");
-            Question first_question = new Question("Equation(s) to get result of 4 ?", "multiple", first_quiz);
-            Answer first_answer = new Answer("2 * 2", true, first_question);
+            Quiz firstQuiz = new Quiz("Math 1");
+            Question firstQuestion = new Question("Equation(s) to get result of 4 ?", "multiple", firstQuiz);
+            Answer firstAnswer = new Answer("2 * 2", true, firstQuestion);
 
-            Answer second_answer = new Answer("2 + 2", true, first_question);
-            Answer third_answer = new Answer("2 / 2", false, first_question);
-            Answer fourth_answer = new Answer("2 - 2", false, first_question);
+            Answer secondAnswer = new Answer("2 + 2", true, firstQuestion);
+            Answer thirdAnswer = new Answer("2 / 2", false, firstQuestion);
+            Answer fourthAnswer = new Answer("2 - 2", false, firstQuestion);
 
-            Question second_question = new Question("2 + 6 is ?", "short",first_quiz);
-            Answer fifth_answer = new Answer("8", true, second_question);
+            Question secondQuestion = new Question("2 + 6 is ?", "short",firstQuiz);
+            Answer fifthAnswer = new Answer("8", true, secondQuestion);
 
-            Question third_question = new Question("Given any number, what is the result after multiplying by 1 ?", "long", first_quiz);
-            Answer sixth_answer = new Answer("Itself", true, third_question);
+            Question thirdQuestion = new Question("Given any number, what is the result after multiplying by 1 ?", "long", firstQuiz);
+            Answer sixthAnswer = new Answer("Itself", true, thirdQuestion);
 
-            Question fourth_question = new Question("Is zero an even number ?", "long", first_quiz);
-            Answer seventh_answer = new Answer("Yesa", true, fourth_question);
+            Question fourthQuestion = new Question("Is zero an even number ?", "long", firstQuiz);
+            Answer seventhAnswer = new Answer("Yesa", true, fourthQuestion);
 
-            Question fifth_question = new Question("Is zero a natural number ?", "long", first_quiz);
-            Answer eighth_answer = new Answer("Yes", true, fifth_question);
+            Question fifthQuestion = new Question("Is zero a natural number ?", "long", firstQuiz);
+            Answer eighthAnswer = new Answer("Yes", true, fifthQuestion);
             // second_question.setAnswers(List.of(fifth_answer));
 
-            List<Question> questions = new ArrayList<>(List.of(first_question, second_question, third_question, fourth_question, fifth_question));
-            List<Answer> answers = new ArrayList<>(List.of(first_answer, second_answer, third_answer, fourth_answer, fifth_answer, sixth_answer, seventh_answer, eighth_answer));
+            List<Question> questions = new ArrayList<>(List.of(firstQuestion, secondQuestion, thirdQuestion, fourthQuestion, fifthQuestion));
+            List<Answer> answers = new ArrayList<>(List.of(firstAnswer, secondAnswer, thirdAnswer, fourthAnswer, fifthAnswer, sixthAnswer, seventhAnswer, eighthAnswer));
 
 
 
-            Quiz second_quiz = new Quiz("Math 2");
-            Question sixth_question = new Question("a*a ?", "multiple", second_quiz);
-            Answer ninth_answer = new Answer("a^2", true, sixth_question);
+            Quiz secondQuiz = new Quiz("Math 2");
+            Question sixthQuestion = new Question("a*a ?", "multiple", secondQuiz);
+            Answer ninthAnswer = new Answer("a^2", true, sixthQuestion);
 
-            Question seventh_question = new Question("2 to the power of 3 ?", "short", second_quiz);
-            Answer tenth_answer = new Answer("8", true, seventh_question);
+            Question seventhQuestion = new Question("2 to the power of 3 ?", "short", secondQuiz);
+            Answer tenthAnswer = new Answer("8", true, seventhQuestion);
 
-            Question eighth_question = new Question("Square root of 1 ?", "short", second_quiz);
-            Answer eleventh_answer = new Answer("1", true, eighth_question);
+            Question eighthQuestion = new Question("Square root of 1 ?", "short", secondQuiz);
+            Answer eleventhAnswer = new Answer("1", true, eighthQuestion);
 
-            Question ninth_question = new Question("Given any number, the 1st power of that number is ?", "long", second_quiz);
-            Answer twelfth_answer = new Answer("Itself", true, ninth_question);
+            Question ninthQuestion = new Question("Given any number, the 1st power of that number is ?", "long", secondQuiz);
+            Answer twelfthAnswer = new Answer("Itself", true, ninthQuestion);
 
-            Question tenth_question = new Question("2^2 equals to ?", "multiple", second_quiz);
-            Answer thirteenth_answer = new Answer("4", true, tenth_question);
-            Answer fourteenth_answer = new Answer("8", false, tenth_question);
-            Answer fifteenth_answer = new Answer("16", false, tenth_question);
-            Answer sixteenth_answer = new Answer("2 * 2", true, tenth_question);
-            questions.addAll(List.of(sixth_question, seventh_question, eighth_question, ninth_question, tenth_question));
-            answers.addAll(List.of(ninth_answer, tenth_answer, eleventh_answer, twelfth_answer, thirteenth_answer, fourteenth_answer, fifteenth_answer, sixteenth_answer));
-
-
-
-            Quiz third_quiz = new Quiz("Basic Java 1");
-            Question eleventh_question = new Question("WORA is ?", "long", third_quiz);
-            Answer seventeenth_answer = new Answer("Write Once, Run Anywhere", true, eleventh_question);
-
-            Question twelfth_question = new Question("Is Java object-oriented programming language ?", "long", third_quiz);
-            Answer eighteenth_answer = new Answer("Yes", true, twelfth_question);
-
-            Question thirteenth_question = new Question("How many primitive(s) are there ?", "multiple", third_quiz);
-            Answer nineteenth_answer = new Answer("5", false, thirteenth_question);
-            Answer twentieth_answer = new Answer("6", true, thirteenth_question);
-            Answer twenty_first_answer = new Answer("7", true, thirteenth_question);
-            Answer twenty_second_answer = new Answer("8", true, thirteenth_question);
-
-            Question fourthteen_question = new Question("Is Java object-oriented programming language ?", "long", third_quiz);
-            Answer twenty_third_answer = new Answer("Yes, it is", true, fourthteen_question);
-
-            Question fifteenth_question = new Question("What is a class ?","long", third_quiz);
-            Answer twenty_fourth_answer = new Answer("A blueprint of object", true, fifteenth_question);
-
-            questions.addAll(List.of(eleventh_question, twelfth_question, thirteenth_question, fourthteen_question, fifteenth_question));
-            answers.addAll(List.of(seventeenth_answer, eighteenth_answer, nineteenth_answer, twentieth_answer, twenty_first_answer, twenty_second_answer, twenty_third_answer, twenty_fourth_answer));
+            Question tenthQuestion = new Question("2^2 equals to ?", "multiple", secondQuiz);
+            Answer thirteenthAnswer = new Answer("4", true, tenthQuestion);
+            Answer fourteenthAnswer = new Answer("8", false, tenthQuestion);
+            Answer fifteenthAnswer = new Answer("16", false, tenthQuestion);
+            Answer sixteenthAnswer = new Answer("2 * 2", true, tenthQuestion);
+            questions.addAll(List.of(sixthQuestion, seventhQuestion, eighthQuestion, ninthQuestion, tenthQuestion));
+            answers.addAll(List.of(ninthAnswer, tenthAnswer, eleventhAnswer, twelfthAnswer, thirteenthAnswer, fourteenthAnswer, fifteenthAnswer, sixteenthAnswer));
 
 
 
-            Quiz fourth_quiz = new Quiz("Basic Java 2");
-            Question sixteenth_question = new Question("How to define main function in Java ?", "long", fourth_quiz);
-            Answer twenty_fifth_answer = new Answer("public static void main(String []args)", true, sixteenth_question);
+            Quiz thirdQuiz = new Quiz("Basic Java 1");
+            Question eleventhQuestion = new Question("WORA is ?", "long", thirdQuiz);
+            Answer seventeenthAnswer = new Answer("Write Once, Run Anywhere", true, eleventhQuestion);
 
-            Question seventeenth_question = new Question("How many byte(s) does long type have?", "multiple", fourth_quiz);
-            Answer twenty_sixth_answer = new Answer("2", false, seventeenth_question);
-            Answer twenty_seventh_answer = new Answer("4", false, seventeenth_question);
-            Answer twenty_eight_answer = new Answer("6", false, seventeenth_question);
-            Answer twenty_ninth_answer = new Answer("8", true, seventeenth_question);
+            Question twelfthQuestion = new Question("Is Java object-oriented programming language ?", "long", thirdQuiz);
+            Answer eighteenthAnswer = new Answer("Yes", true, twelfthQuestion);
 
-            Question eighteenth_question = new Question("Most keyword to use interface ?", "long", fourth_quiz);
-            Answer thirdtieth_answer = new Answer("implements",true, eighteenth_question);
+            Question thirteenthQuestion = new Question("How many primitive(s) are there ?", "multiple", thirdQuiz);
+            Answer nineteenthAnswer = new Answer("5", false, thirteenthQuestion);
+            Answer twentiethAnswer = new Answer("6", true, thirteenthQuestion);
+            Answer twentyFirstAnswer = new Answer("7", true, thirteenthQuestion);
+            Answer twentySecondAnswer = new Answer("8", true, thirteenthQuestion);
 
-            Question nineteenth_question = new Question("What is JVM ?", "long", fourth_quiz);
-            Answer thirty_first_answer = new Answer("Java Virtual Machine", true, nineteenth_question);
+            Question fourthteenQuestion = new Question("Is Java object-oriented programming language ?", "long", thirdQuiz);
+            Answer twentyThirdAnswer = new Answer("Yes, it is", true, fourthteenQuestion);
 
-            Question twentieth_question = new Question("Keyword to use abstract class ?", "long", fourth_quiz);
-            Answer thirdty_second_answer = new Answer("extends", true, twentieth_question);
+            Question fifteenthQuestion = new Question("What is a class ?","long", thirdQuiz);
+            Answer twentyFourthAnswer = new Answer("A blueprint of object", true, fifteenthQuestion);
 
-            questions.addAll(List.of(sixteenth_question, seventeenth_question, eighteenth_question, nineteenth_question, twentieth_question));
-            answers.addAll(List.of(twenty_fifth_answer, twenty_sixth_answer, twenty_seventh_answer, twenty_eight_answer, twenty_ninth_answer, thirdtieth_answer, thirty_first_answer, thirdty_second_answer));
-
-
-
-            Quiz fifth_quiz = new Quiz("Java OOP");
-            Question twenty_first_question = new Question("How to provoke superclass ?", "long", fifth_quiz);
-            Answer thirty_third_answer = new Answer("super()", true, twenty_first_question);
-
-            Question twenty_second_question = new Question("How many principle(s) does OOP have?", "multiple", fifth_quiz);
-            Answer thirty_fourth_answer = new Answer("2", false, twenty_second_question);
-            Answer thirty_fifth_answer = new Answer("3", false, twenty_second_question);
-            Answer thirty_sixth_answer = new Answer("4", true, twenty_second_question);
-            Answer thirty_seventh_answer = new Answer("5", false, twenty_second_question);
-
-            Question twenty_third_question = new Question("What is encapsulation ?", "long", fifth_quiz);
-            Answer thirty_eight_answer = new Answer("A process of wrapping code and data together into a single unit", true, twenty_third_question);
-
-            Question twenty_fourth_question = new Question("What is abstraction ?", "long", fifth_quiz);
-            Answer thirty_ninth_answer= new Answer("A process of hiding the implementation detail", true, twenty_fourth_question);
-
-            Question twenty_fifth_question = new Question("How many ways to achieve abstraction ?", "short", fifth_quiz);
-            Answer fourtieth_answer = new Answer("2", true, twenty_fifth_question);
-
-            questions.addAll(List.of(twenty_first_question, twenty_second_question, twenty_third_question, twenty_fourth_question, twenty_fifth_question));
-            answers.addAll(List.of(thirty_third_answer,thirty_fourth_answer, thirty_fifth_answer, thirty_sixth_answer, thirty_seventh_answer, thirty_eight_answer, thirty_ninth_answer, fourtieth_answer));
+            questions.addAll(List.of(eleventhQuestion, twelfthQuestion, thirteenthQuestion, fourthteenQuestion, fifteenthQuestion));
+            answers.addAll(List.of(seventeenthAnswer, eighteenthAnswer, nineteenthAnswer, twentiethAnswer, twentyFirstAnswer, twentySecondAnswer, twentyThirdAnswer, twentyFourthAnswer));
 
 
-            quizRepository.saveAll(List.of(first_quiz, second_quiz, third_quiz, fourth_quiz, fifth_quiz));
+
+            Quiz fourthQuiz = new Quiz("Basic Java 2");
+            Question sixteenthQuestion = new Question("How to define main function in Java ?", "long", fourthQuiz);
+            Answer twentyFifthAnswer = new Answer("public static void main(String []args)", true, sixteenthQuestion);
+
+            Question seventeenthQuestion = new Question("How many byte(s) does long type have?", "multiple", fourthQuiz);
+            Answer twentySixthAnswer = new Answer("2", false, seventeenthQuestion);
+            Answer twentySeventhAnswer = new Answer("4", false, seventeenthQuestion);
+            Answer twentyEightAnswer = new Answer("6", false, seventeenthQuestion);
+            Answer twentyNinthAnswer = new Answer("8", true, seventeenthQuestion);
+
+            Question eighteenthQuestion = new Question("Most keyword to use interface ?", "long", fourthQuiz);
+            Answer thirdtiethAnswer = new Answer("implements",true, eighteenthQuestion);
+
+            Question nineteenthQuestion = new Question("What is JVM ?", "long", fourthQuiz);
+            Answer thirtyFirstAnswer = new Answer("Java Virtual Machine", true, nineteenthQuestion);
+
+            Question twentiethQuestion = new Question("Keyword to use abstract class ?", "long", fourthQuiz);
+            Answer thirdtySecondAnswer = new Answer("extends", true, twentiethQuestion);
+
+            questions.addAll(List.of(sixteenthQuestion, seventeenthQuestion, eighteenthQuestion, nineteenthQuestion, twentiethQuestion));
+            answers.addAll(List.of(twentyFifthAnswer, twentySixthAnswer, twentySeventhAnswer, twentyEightAnswer, twentyNinthAnswer, thirdtiethAnswer, thirtyFirstAnswer, thirdtySecondAnswer));
+
+
+
+            Quiz fifthQuiz = new Quiz("Java OOP");
+            Question twentyFirstQuestion = new Question("How to provoke superclass ?", "long", fifthQuiz);
+            Answer thirtyThirdAnswer = new Answer("super()", true, twentyFirstQuestion);
+
+            Question twentySecondQuestion = new Question("How many principle(s) does OOP have?", "multiple", fifthQuiz);
+            Answer thirtyFourthAnswer = new Answer("2", false, twentySecondQuestion);
+            Answer thirtyFifthAnswer = new Answer("3", false, twentySecondQuestion);
+            Answer thirtySixthAnswer = new Answer("4", true, twentySecondQuestion);
+            Answer thirtySeventhAnswer = new Answer("5", false, twentySecondQuestion);
+
+            Question twentyThirdQuestion = new Question("What is encapsulation ?", "long", fifthQuiz);
+            Answer thirtyEightAnswer = new Answer("A process of wrapping code and data together into a single unit", true, twentyThirdQuestion);
+
+            Question twentyFourthQuestion = new Question("What is abstraction ?", "long", fifthQuiz);
+            Answer thirtyNinthAnswer= new Answer("A process of hiding the implementation detail", true, twentyFourthQuestion);
+
+            Question twentyFifthQuestion = new Question("How many ways to achieve abstraction ?", "short", fifthQuiz);
+            Answer fourtiethAnswer = new Answer("2", true, twentyFifthQuestion);
+
+            questions.addAll(List.of(twentyFirstQuestion, twentySecondQuestion, twentyThirdQuestion, twentyFourthQuestion, twentyFifthQuestion));
+            answers.addAll(List.of(thirtyThirdAnswer, thirtyFourthAnswer, thirtyFifthAnswer, thirtySixthAnswer, thirtySeventhAnswer, thirtyEightAnswer, thirtyNinthAnswer, fourtiethAnswer));
+
+
+            quizRepository.saveAll(List.of(firstQuiz, secondQuiz, thirdQuiz, fourthQuiz, fifthQuiz));
             questionRepository.saveAll(questions);
             answerRepository.saveAll(answers);
-
-
-
-
-
-            // quizRepository.saveAll(List.of(first_quiz));
-            // questionRepository.saveAll(List.of(first_question));
-            // answerRepository.saveAll(List.of(first_answer, second_answer, third_answer, fourth_answer));
-
-
         };
 
     }

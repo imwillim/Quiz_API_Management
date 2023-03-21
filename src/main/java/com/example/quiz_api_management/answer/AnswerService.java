@@ -2,6 +2,7 @@ package com.example.quiz_api_management.answer;
 
 import com.example.quiz_api_management.question.Question;
 import com.example.quiz_api_management.question.QuestionService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,10 +22,15 @@ public class AnswerService {
         this.questionService = questionService;
     }
 
+    /*
+    Though IlegateStateException return a signal if function invoke at an illegal or inappropriate time, it is not a good case for this scenario
+    Use EntityNotFoundException will be appropriate in this scenario, due to the meaning of NotFound.
+     */
+
     public Optional<Question> getQuestionById(int questionId){
         Optional<Question> question = questionService.getQuestion(questionId);
         if (question.isEmpty()) {
-            throw new IllegalStateException("Question not found.");
+            throw new EntityNotFoundException("Question not found.");
         }
         return question;
     }
@@ -48,36 +54,40 @@ public class AnswerService {
         return answers.stream().map(answerDTOMapper).toList();
     }
 
-
     public AnswerDTO getAnswer(int questionId, int answerId){
         if (getQuestionById(questionId).isEmpty()){
-            throw new IllegalStateException("Cannot find answer due to question is not found.");
+            throw new EntityNotFoundException("Cannot find answer due to question is not found.");
         }
         Optional <Answer> answer = answerRepository.findById(answerId);
         if(answer.isEmpty()){
-            throw new IllegalStateException("Answer not found.");
+            throw new EntityNotFoundException("Answer not found.");
         }
         return answer.map(answerDTOMapper).get();
     }
 
-    public <K, V> void addAnswer(int questionId, Map<K, V> reqBody) {
+    public <Key, Value> void addAnswer(int questionId, Map<Key, Value> reqBody) {
+        System.out.println(reqBody);
         Optional<Question> paramQuestion = getQuestionById(questionId);
         if (paramQuestion.isEmpty()) {
-            throw new IllegalStateException("Question not found.");
+            throw new EntityNotFoundException("Question not found.");
         }
         Question question = paramQuestion.get();
         answerRepository.save(new Answer((String) reqBody.get("name"),
                 (Boolean) reqBody.get("correct"), question));
     }
 
+
+    /*
+    Annotation @Transactional provokes the rollback if an exception occurs.
+     */
     @Transactional
-    public <K, V> void updateAnswer(int questionId, int answerId, Map<K, V> reqBody) {
+    public <Key, Value> void updateAnswer(int questionId, int answerId, Map<Key, Value> reqBody) {
         if (getAnswersByQuestion(questionId) == null){
-            throw new IllegalStateException("Cannot find answer due to question is not found.");
+            throw new EntityNotFoundException("Cannot find answer due to question is not found.");
         }
         Answer answer =
                 answerRepository.findById(answerId)
-                        .orElseThrow(() -> new IllegalStateException(
+                        .orElseThrow(() -> new EntityNotFoundException(
                                 "Answer with ID" + answerId + "does not exist."
                         ));
 
