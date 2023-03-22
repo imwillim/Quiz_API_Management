@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-
 @Service
 public class AnswerService {
     private final AnswerRepository answerRepository;
@@ -23,7 +22,7 @@ public class AnswerService {
     }
 
     /*
-    Though IlegateStateException return a signal if function invoke at an illegal or inappropriate time, it is not a good case for this scenario
+    Though IllegalStateException return a signal if function invoke at an illegal or inappropriate time, it is not a good case for this scenario
     Use EntityNotFoundException will be appropriate in this scenario, due to the meaning of NotFound.
      */
 
@@ -36,7 +35,7 @@ public class AnswerService {
     }
 
     public List<AnswerDTO> getAnswersByQuestion(int questionId) {
-        Optional<Question> question =getQuestionById(questionId);
+        Optional<Question> question = getQuestionById(questionId);
         return answerRepository.findAnswerByQuestion(question)
                 .stream()
                 .map(answerDTOMapper)
@@ -65,15 +64,14 @@ public class AnswerService {
         return answer.map(answerDTOMapper).get();
     }
 
-    public <Key, Value> void addAnswer(int questionId, Map<Key, Value> reqBody) {
-        System.out.println(reqBody);
+    public void addAnswer(int questionId, AnswerDTO reqBody) {
         Optional<Question> paramQuestion = getQuestionById(questionId);
         if (paramQuestion.isEmpty()) {
             throw new EntityNotFoundException("Question not found.");
         }
         Question question = paramQuestion.get();
-        answerRepository.save(new Answer((String) reqBody.get("name"),
-                (Boolean) reqBody.get("correct"), question));
+        answerRepository.save(new Answer(reqBody.getName(),
+                reqBody.isCorrect(), question));
     }
 
 
@@ -81,30 +79,32 @@ public class AnswerService {
     Annotation @Transactional provokes the rollback if an exception occurs.
      */
     @Transactional
-    public <Key, Value> void updateAnswer(int questionId, int answerId, Map<Key, Value> reqBody) {
+    public AnswerDTO updateAnswer(int questionId, int answerId, AnswerDTO reqBody) {
         if (getAnswersByQuestion(questionId) == null){
             throw new EntityNotFoundException("Cannot find answer due to question is not found.");
         }
-        Answer answer =
-                answerRepository.findById(answerId)
-                        .orElseThrow(() -> new EntityNotFoundException(
-                                "Answer with ID" + answerId + "does not exist."
-                        ));
 
-        if(reqBody.get("name") != null) {
-            answer.setName((String) reqBody.get("name"));
-            answer.setCorrect((boolean) reqBody.get("correct"));
+        Optional<Answer> optionalAnswer = answerRepository.findById(answerId);
+        if(optionalAnswer.isEmpty()){
+            throw new EntityNotFoundException("Cannot find answer due to question is not found.");
         }
+
+        Answer answer = optionalAnswer.get();
+        if(reqBody.getName() != null) {
+            answer.setName(reqBody.getName());
+            answer.setCorrect(reqBody.isCorrect());
+            answerRepository.save(answer);
+        }
+        return optionalAnswer.map(answerDTOMapper).get();
     }
 
     public void deleteAnswer(int questionId, int answerId) {
         if (getAnswersByQuestion(questionId) == null){
-            throw new IllegalStateException("Cannot find answer due to question is not found.");
+            throw new EntityNotFoundException("Cannot find answers due to question is not found.");
         }
         boolean exists = answerRepository.existsById(answerId);
         if (!exists) {
-            throw new IllegalStateException(
-                    "Answer with id" + answerId + "is not valid.");
+            throw new EntityNotFoundException("Answer with id" + answerId + "is not valid.");
         }
         answerRepository.deleteById(answerId);
     }

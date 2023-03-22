@@ -55,7 +55,9 @@ public class Answer {
     private Question question;
 
     /*
-    Change LocalDate to LocalDateTime to gain full information related to time.
+    LocalDate provides only Date but does not cost memory as much as than LocalDateTime.
+    LocalDateTime provides full information about time (hour, minute, second and millisecond) but costs more memory for information.
+    Currently, there is no need to for full information of time in Answer service (like sorting).
      */
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
