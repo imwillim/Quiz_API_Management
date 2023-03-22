@@ -1,15 +1,13 @@
-
 package com.example.quiz_api_management.question;
-
 
 import com.example.quiz_api_management.answer.Answer;
 import com.example.quiz_api_management.quiz.Quiz;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -30,23 +28,30 @@ public class Question {
     )
     @Column(name = "id", unique = true)
     private int id;
+
     @Column(name = "name", nullable = false)
     private String name;
     @Column(name = "type", nullable = false)
     private String type;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at", nullable = false)
-    private LocalDate updatedAt;
+    private LocalDateTime updatedAt;
 
     /*
     Cascade in Hibernate is the way to achieve dependent relationship (in this case, this relationship is aggregration).
     In this case we have relationship Question-Answer, if question is deleted completely, list of answers also are deleted.
     Without Question, the Answer model does not make sense if it exists alone
     */
+
+    /*
+    Updated: JsonBackReference used to avoid infinite recursion.
+    Also, it is used to not show list of answers when serializing
+     */
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<Answer> answers;
 
     /*
@@ -61,8 +66,8 @@ public class Question {
         this.name = name;
         this.type = type;
         this.quiz = quiz;
-        this.createdAt = LocalDate.now();
-        this.updatedAt = LocalDate.now();
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     public Question(){
