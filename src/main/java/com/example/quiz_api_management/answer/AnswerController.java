@@ -1,78 +1,215 @@
 package com.example.quiz_api_management.answer;
 
+import com.example.quiz_api_management.common.RequiredFieldSignal;
+import com.example.quiz_api_management.common.ResponseReturn;
+import com.example.quiz_api_management.exception.DuplicateException;
+import com.example.quiz_api_management.exception.NotFoundException;
+import com.example.quiz_api_management.question.Question;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @RestController()
 @RequestMapping(path = "/api/v1/")
 public class AnswerController {
     private final AnswerService answerService;
+
     @Autowired
-    public AnswerController(AnswerService answerService){
+    public AnswerController(AnswerService answerService) {
         this.answerService = answerService;
     }
+
 
     /*
     ok() method actually returns HTTP status OK.
     200 - OK returns when the request succeeded, and is allowed in GET, HEAD, PUT, POST & TRACE
      */
+
     @GetMapping("questions/{questionid}/answers")
     @ResponseBody
-    public ResponseEntity<List<AnswerDTO>> getAnswersByQuestion(@PathVariable("questionid") int questionId){
-        List<AnswerDTO> answersDTO = answerService.getAnswersByQuestion(questionId);
-        if(answersDTO.isEmpty())
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        return ResponseEntity.ok().body(answersDTO);
+    public ResponseEntity<ResponseReturn> getAnswersByQuestion(@PathVariable("questionid") int questionId) {
+        /*
+            ofNullable() method in here is used to get an instance of this Optional class with Question Entity
+            If the value is null, this method returns an empty instance.
+
+            orElseThrow() in here is used to throw exceptions
+            if an instance of Optional class with Question Entity is null
+
+            => Check if question is not found. Otherwise, an exception is thrown.
+        */
+        Optional<Question> question = Optional.ofNullable(answerService.getQuestionById(questionId)
+                .orElseThrow(() -> new NotFoundException("Question not found")));
+
+        List<AnswerDTO> answersDTO = answerService.getAnswersByQuestion(question);
+        return new ResponseEntity<>(
+                new ResponseReturn(LocalDateTime.now(),
+                        "List of answers is returned.",
+                        HttpStatus.OK.value(),
+                        true,
+                        answersDTO), HttpStatus.OK);
     }
 
+
     @GetMapping("questions/{questionid}/answers/shuffle")
-    public ResponseEntity<List<AnswerDTO>> shuffleAnswers(@PathVariable("questionid") int questionId) {
-        return ResponseEntity.ok().body(answerService.shuffleAnswers(questionId));
+    public ResponseEntity<ResponseReturn> shuffleAnswers(@PathVariable("questionid") int questionId) {
+        Optional<Question> question = Optional.ofNullable(answerService.getQuestionById(questionId)
+                .orElseThrow(() -> new NotFoundException("Question not found")));
+
+        return new ResponseEntity<>(
+                new ResponseReturn(LocalDateTime.now(),
+                        "Answers are shuffled.",
+                        HttpStatus.OK.value(),
+                        true,
+                        answerService.shuffleAnswers(question)), HttpStatus.OK);
     }
 
     @GetMapping("questions/{questionid}/answers/{answerid}")
-    public ResponseEntity<AnswerDTO> getAnswer(@PathVariable("questionid") int questionId,
-                               @PathVariable("answerid") int answerid) {
-        return ResponseEntity.ok().body(answerService.getAnswer(questionId, answerid));
-    }
+    public ResponseEntity<ResponseReturn> getAnswer(@PathVariable("questionid") int questionId,
+                                                    @PathVariable("answerid") int answerId) {
 
-    /*
-    <Key, Value> here is actually a generic used for RequestBody parameter. Generic will help the method reuse objects of different types.
-    In this case, I use generics due to the request body is a Json object which are not constant primitive types.
-     However, it can lead to uncertain readability, so it is considered to use Object, instead*/
+        Optional<Question> question = Optional.ofNullable(answerService.getQuestionById(questionId)
+                .orElseThrow(() -> new NotFoundException("Question not found")));
+
+        // Like above, this statement is used to check if answer is not found.
+        // If not found, an exception is thrown
+        Optional<AnswerDTO> answerDTO = Optional.ofNullable(answerService.getAnswer(question, answerId)
+                .orElseThrow(() -> new NotFoundException("Answer not found")));
+
+        return new ResponseEntity<>(
+                new ResponseReturn(LocalDateTime.now(),
+                            "An answer is returned.",
+                            HttpStatus.OK.value(),
+                            true,
+                            answerDTO), HttpStatus.OK);
+    }
 
     /*
     201 - Created returns when the request succeeded, and a new resource was created as a result.
      */
-
     @PostMapping("questions/{questionid}/answers/add")
-    public ResponseEntity addAnswer(@PathVariable("questionid") int questionId,
-                                         @RequestBody AnswerDTO reqBody){
-        answerService.addAnswer(questionId, reqBody);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .build(); // Create a Response instance from the ResponseBuilder
+    public ResponseEntity<ResponseReturn> addAnswer(@PathVariable("questionid") int questionId,
+                                                    @Valid @RequestBody AnswerDTO reqBody, BindingResult bindingResult) {
+        Optional<Question> question = Optional.ofNullable(answerService.getQuestionById(questionId).orElseThrow(()
+                -> new NotFoundException("Question not found")));
+
+        /*
+        bindingResult is used along with @Valid annotation.
+        The purpose why it is used is that to catch if the fields in RequestBody are not valid.
+
+        getField() to get the key of RequestBody, getDefaultMessage() to show why that field is not valid.
+
+        => Check if RequestBody is valid.
+         */
+        if (bindingResult.hasErrors()) {
+            List<RequiredFieldSignal> requiredFieldSignals = new ArrayList<>();
+            String errorMessage = "";
+            bindingResult.getFieldErrors().forEach(
+                    fieldError -> {
+                        requiredFieldSignals.add(
+                                new RequiredFieldSignal(fieldError.getField(), fieldError.getDefaultMessage()));
+                    }
+            );
+            for (RequiredFieldSignal requiredFieldSignal : requiredFieldSignals){
+                errorMessage += "Field required: "+ requiredFieldSignal.getField() +
+                        ", cause: "+ requiredFieldSignal.getCause() + " \n";
+            }
+
+
+            return new ResponseEntity<>(new ResponseReturn(LocalDateTime.now(),
+                    errorMessage,
+                    HttpStatus.BAD_REQUEST.value(),
+                    false,
+                    null), HttpStatus.BAD_REQUEST);
+        }
+
+        // Check any answer's value is similar to the value of RequestBody
+        if (answerService.notExistAnswer(question, reqBody).isPresent()) {
+            throw new DuplicateException("Duplicate value found.");
+        }
+
+        AnswerDTO newAnswer = answerService.createAnswer(question, reqBody);
+        return new ResponseEntity<>(
+                new ResponseReturn(LocalDateTime.now(),
+                        "New answer is added.",
+                        HttpStatus.CREATED.value(),
+                        true,
+                        newAnswer), HttpStatus.CREATED);
     }
 
+    /*
+    400 - Bad Request status code indicates that the server cannot proceed.
+     */
     @PutMapping("questions/{questionid}/answers/{answerid}/edit")
-    public ResponseEntity updateAnswer(@PathVariable("questionid") int questionId,
-                             @PathVariable("answerid") int answerId,
-                             @RequestBody AnswerDTO reqBody){
-        AnswerDTO updatedAnswer = answerService.updateAnswer(questionId, answerId, reqBody);
-        return ResponseEntity.ok().body(updatedAnswer);
-    }
+    public ResponseEntity<ResponseReturn> updateAnswer(@PathVariable("questionid") int questionId,
+                                                       @PathVariable("answerid") int answerId,
+                                                       @Valid @RequestBody AnswerDTO reqBody, BindingResult bindingResult) {
 
+        // Check question is not found
+        Optional<Question> question = Optional.ofNullable(answerService.getQuestionById(questionId).orElseThrow(()
+                -> new NotFoundException("Question not found")));
+
+        // Check answer is not found
+        Optional.of(answerService.getAnswer(question, answerId).orElseThrow(()
+                -> new NotFoundException("Answer not found")));
+
+        // Check the RequestBody is not valid
+        if (bindingResult.hasErrors()) {
+            List<RequiredFieldSignal> requiredFieldSignals = new ArrayList<>();
+            String errorMessage = "";
+            bindingResult.getFieldErrors().forEach(
+                    fieldError -> {
+                        requiredFieldSignals.add(
+                                new RequiredFieldSignal(fieldError.getField(), fieldError.getDefaultMessage()));
+                    }
+            );
+            for (RequiredFieldSignal requiredFieldSignal : requiredFieldSignals){
+                errorMessage += "Field required: "+ requiredFieldSignal.getField() +
+                        ", cause: "+ requiredFieldSignal.getCause() + "\n";
+            }
+
+            return new ResponseEntity<>(new ResponseReturn(LocalDateTime.now(),
+                    errorMessage,
+                    HttpStatus.BAD_REQUEST.value(),
+                    false,
+                    null), HttpStatus.BAD_REQUEST);
+        }
+
+        AnswerDTO returnAnswer = answerService.updateAnswer(answerId, reqBody);
+
+        return new ResponseEntity<>(
+                new ResponseReturn(LocalDateTime.now(),
+                        "Successfully created.",
+                        HttpStatus.OK.value(),
+                        true,
+                        returnAnswer), HttpStatus.OK);
+
+    }
 
     /*
     HttpStatus - 204 - No Content means that there is no content to send in this request.
      */
     @DeleteMapping("questions/{questionid}/answers/{answerid}/delete")
-    public ResponseEntity deleteAnswer(@PathVariable("questionid") int questionId,
+    public ResponseEntity<ResponseReturn> deleteAnswer(@PathVariable("questionid") int questionId,
                                    @PathVariable("answerid") int answerId){
-        answerService.deleteAnswer(questionId, answerId);
-        return ResponseEntity.noContent().build();
+
+        Optional<Question> question = Optional.ofNullable(answerService.getQuestionById(questionId).orElseThrow(()
+                -> new NotFoundException("Question not found")));
+
+        Optional.of(answerService.getAnswer(question, answerId).orElseThrow(()
+                -> new NotFoundException("Answer not found")));
+
+        answerService.deleteAnswer(answerId);
+        return new ResponseEntity<>(
+                new ResponseReturn(LocalDateTime.now(),
+                        "",
+                        HttpStatus.NO_CONTENT.value(),
+                        true,
+                        null), HttpStatus.NO_CONTENT);
     }
 }

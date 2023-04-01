@@ -5,11 +5,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 
 @Entity
-@Table (name ="answer")
+@Table (name = "answer")
 /*
  These annotations belong to lombok, which can generate setter and getter methods automatically
  Moreover, it reduces verbosity of the code and avoid repetition.
@@ -38,8 +38,10 @@ public class Answer {
 
     @Column(name="id", unique = true)
     private int id;
-    @Column(name="name", nullable = false)
-    private String name;
+
+    @Column(name="value", nullable = false)
+    private String value;
+
     @Column(name="is_correct", nullable = false)
     private boolean isCorrect;
 
@@ -55,25 +57,30 @@ public class Answer {
     private Question question;
 
     /*
-    LocalDate provides only Date but does not cost memory as much as than LocalDateTime.
-    LocalDateTime provides full information about time (hour, minute, second and millisecond) but costs more memory for information.
-    Currently, there is no need to for full information of time in Answer service (like sorting).
+    LocalDate provides only Date but costs memory than LocalDateTime,
+    while LocalDateTime provides full information about time (hour, minute, second and millisecond).
+    Currently, there is no need for full information of time in Answer entity (like sorting).
      */
     @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
     @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
+    private LocalDate updatedAt;
 
-    public Answer(String name, boolean isCorrect, Question question) {
-        this.name = name;
+    public Answer(String value, boolean isCorrect, Question question) {
+        this.value = value;
         this.isCorrect = isCorrect;
         this.isRemoved = false;
         this.question = question;
-        this.createdAt = LocalDateTime.now(); // Initialized
-        this.updatedAt = LocalDateTime.now(); // Initialized
+        this.createdAt = LocalDate.now(); // We don't need to sort or filter so LocalDate is enough because of memory
+        this.updatedAt = LocalDate.now();
     }
 
     public Answer() {
     }
 
+    public Answer(AnswerDTO reqBody, Question question) {
+        this.value = reqBody.getValue();
+        this.isCorrect = reqBody.isCorrect();
+        this.question = question;
+    }
 }
