@@ -2,11 +2,9 @@ package com.example.quiz_api_management.answer;
 
 import com.example.quiz_api_management.question.Question;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.time.LocalDate;
-
 
 @Entity
 @Table (name = "answer")
@@ -14,8 +12,7 @@ import java.time.LocalDate;
  These annotations belong to lombok, which can generate setter and getter methods automatically
  Moreover, it reduces verbosity of the code and avoid repetition.
  */
-@Getter
-@Setter
+@Data
 public class Answer {
     @Id
     /*

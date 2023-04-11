@@ -5,16 +5,14 @@ import com.example.quiz_api_management.quiz.Quiz;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Table (name="question")
-@Getter
-@Setter
+@Data
 public class Question {
     @Id
     @SequenceGenerator(
