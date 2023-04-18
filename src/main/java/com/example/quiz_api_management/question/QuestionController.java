@@ -4,7 +4,7 @@ import com.example.quiz_api_management.common.PaginationReturn;
 import com.example.quiz_api_management.common.ResponseReturn;
 import com.example.quiz_api_management.exception.DuplicateException;
 import com.example.quiz_api_management.exception.NotFoundException;
-import com.example.quiz_api_management.exception.NotValidParams;
+import com.example.quiz_api_management.exception.NotValidParamsException;
 import com.example.quiz_api_management.quiz.Quiz;
 
 import com.example.quiz_api_management.util.RequestBodyError;
@@ -36,11 +36,21 @@ public class QuestionController {
             @RequestParam(value = "filter", required = false) String filterQuery,
             @RequestParam(value = "sort", required = false) String sortQuery) {
 
-        if (filterQuery != null && !questionService.checkValidTypeFilter(filterQuery))
-            throw new NotValidParams("Check query for filtering.");
+        if (filterQuery != null){
+            if(!questionService.checkLengthQueryParam(filterQuery))
+                throw new NotValidParamsException("Length for filter query param is not valid.");
 
-        if (sortQuery != null && !questionService.checkValidValueSort(sortQuery))
-            throw new NotValidParams("Check query for sorting.");
+            if (!questionService.checkValidTypeFilter(filterQuery))
+                throw new NotValidParamsException("Option for filtering query does not exist.");
+        }
+
+        if (sortQuery!= null) {
+            if (!questionService.checkLengthQueryParam(sortQuery))
+                throw new NotValidParamsException("Length for filter query param is not valid.");
+
+            if (!questionService.checkValidValueSort(sortQuery))
+                throw new NotValidParamsException("Option for sorting query does not exist.");
+        }
 
         Page<QuestionDTO> paginationQuestion = questionService.paginateQuestions(page, filterQuery, sortQuery);
         int currentPage = questionService.getCurrentPage(paginationQuestion);

@@ -116,6 +116,10 @@ public class QuestionService {
         }
     }
 
+    public boolean checkLengthQueryParam(String queryParam){
+        return queryParam.length() < 15;
+    }
+
     public boolean checkValidTypeFilter(String filterType){
         // Check if filterType belongs to {"multiple", "long", "short"}
         return QuestionFilter.contains(filterType);
