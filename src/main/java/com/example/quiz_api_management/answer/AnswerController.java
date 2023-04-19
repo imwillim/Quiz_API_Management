@@ -90,7 +90,8 @@ public class AnswerController {
      */
     @PostMapping("questions/{questionid}/answers")
     public ResponseEntity<ResponseReturn> addAnswer(@PathVariable("questionid") int questionId,
-                                                    @Valid @RequestBody AnswerDTO reqBody, BindingResult bindingResult) {
+                                                    @Valid @RequestBody AnswerDTO reqBody,
+                                                    BindingResult bindingResult) {
         Optional<Question> question = Optional.ofNullable(answerService.getQuestionById(questionId).orElseThrow(()
                 -> new NotFoundException("Question not found")));
 
@@ -129,7 +130,8 @@ public class AnswerController {
     @PutMapping("questions/{questionid}/answers/{answerid}")
     public ResponseEntity<ResponseReturn> updateAnswer(@PathVariable("questionid") int questionId,
                                                        @PathVariable("answerid") int answerId,
-                                                       @Valid @RequestBody AnswerDTO reqBody, BindingResult bindingResult) {
+                                                       @Valid @RequestBody AnswerDTO reqBody,
+                                                       BindingResult bindingResult) {
         // Check question is not found
         Optional<Question> question = Optional.ofNullable(answerService.getQuestionById(questionId).orElseThrow(()
                 -> new NotFoundException("Question not found")));

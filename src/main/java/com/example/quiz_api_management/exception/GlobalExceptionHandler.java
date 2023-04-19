@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
                 HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(NotValidParams.class)
+    @ExceptionHandler(NotValidParamsException.class)
     public ResponseEntity<ResponseReturn> handleValidParamsException(Exception exception){
         return new ResponseEntity<>(
                 new ResponseReturn(
@@ -53,4 +53,16 @@ public class GlobalExceptionHandler {
                         false, null),
                 HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(NotValidCredentialException.class)
+    public ResponseEntity<ResponseReturn> handleCredentialException(Exception exception){
+        return new ResponseEntity<>(
+                new ResponseReturn(
+                        LocalDateTime.now(),
+                        exception.getMessage(),
+                        HttpStatus.UNAUTHORIZED.value(), // 401
+                        false, null),
+                HttpStatus.UNAUTHORIZED);
+    }
+
 }

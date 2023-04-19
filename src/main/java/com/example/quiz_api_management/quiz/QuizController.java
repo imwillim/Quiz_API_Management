@@ -4,7 +4,7 @@ import com.example.quiz_api_management.common.PaginationReturn;
 import com.example.quiz_api_management.common.ResponseReturn;
 import com.example.quiz_api_management.exception.DuplicateException;
 import com.example.quiz_api_management.exception.NotFoundException;
-import com.example.quiz_api_management.exception.NotValidParams;
+import com.example.quiz_api_management.exception.NotValidParamsException;
 import com.example.quiz_api_management.util.RequestBodyError;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class QuizController {
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "sort", required = false) String sortQuery) {
         if (sortQuery != null && !quizService.checkValidSortQuery(sortQuery))
-            throw new NotValidParams("Check query for sorting.");
+            throw new NotValidParamsException("Check query for sorting.");
 
         Page<QuizDTO> paginationQuiz = quizService.paginateQuizzes(page, sortQuery);
         int currentPage = quizService.getCurrentPage(paginationQuiz);
