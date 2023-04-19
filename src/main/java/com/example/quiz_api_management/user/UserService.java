@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -74,5 +75,21 @@ public class UserService {
                 .setExpiration(Date.from(ZonedDateTime.now().plusMinutes(TWENTY_MINUTES).toInstant()))
                 .compact();
         return new AuthToken(jwtToken, TWENTY_MINUTES *60);
+    }
+
+    public boolean checkJwt(AuthToken authToken){
+        Jws<Claims> jws = Jwts.parserBuilder().build().parseClaimsJws(authToken.getToken());
+        return !Objects.equals(jws, null);
+    }
+
+    public void signOut(AuthToken authToken){
+        int EXPIRED_SECOND = 0;
+        authToken.setExpirationTime(EXPIRED_SECOND);
+    }
+
+    public void changePassword(Optional<UserDTO> existUser, UserPassword userPassword){
+        User user = userRepository.findById(existUser.get().getId()).get();
+        user.setPassword(userPassword.getPassword());
+        userRepository.save(user);
     }
 }
