@@ -21,13 +21,14 @@ import java.util.Optional;
 @RequestMapping(path = "/api/v1")
 public class UserController {
     private final UserService userService;
+
     @Autowired
-    public UserController(UserService userService){
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @GetMapping(path="/users")
-    public ResponseEntity<ResponseReturn> getAllUsers(){
+    @GetMapping(path = "/users")
+    public ResponseEntity<ResponseReturn> getAllUsers() {
         List<UserDTO> users = userService.getUsers();
 
         return new ResponseEntity<>(new ResponseReturn(
@@ -53,9 +54,9 @@ public class UserController {
     }
 
     // Create user
-    @PostMapping(path="/signup")
+    @PostMapping(path = "/signup")
     public ResponseEntity<ResponseReturn> signUp(@Valid @RequestBody User reqBody,
-                                                 BindingResult bindingResult){
+                                                 BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return RequestBodyError.returnRequiredFields(bindingResult);
         }
@@ -74,7 +75,7 @@ public class UserController {
 
     @PutMapping(path = "/users/{userid}")
     public ResponseEntity<ResponseReturn> updateUser(@PathVariable("userid") int userId,
-                                                     @Valid @RequestBody UserDTO reqBody){
+                                                     @Valid @RequestBody UserDTO reqBody) {
         userService.getUser(userId).orElseThrow(() -> new NotFoundException("User not found"));
 
         UserDTO updatedUser = userService.updateUser(userId, reqBody);
@@ -89,7 +90,7 @@ public class UserController {
     }
 
     @DeleteMapping(path = "/users/{userid}")
-    public ResponseEntity<ResponseReturn> deleteUser(@PathVariable("userid") int userId){
+    public ResponseEntity<ResponseReturn> deleteUser(@PathVariable("userid") int userId) {
         userService.getUser(userId).orElseThrow(() -> new NotFoundException("User not found"));
 
         userService.deleteUser(userId);
@@ -103,15 +104,15 @@ public class UserController {
 
     }
 
-    @PostMapping(path="/auth/signin")
-    public ResponseEntity<ResponseReturn> login(@Valid @RequestBody User reqBody, BindingResult bindingResult) {
+    @PostMapping(path = "/auth/signin")
+    public ResponseEntity<ResponseReturn> signIn(@Valid @RequestBody User reqBody, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return RequestBodyError.returnRequiredFields(bindingResult);
         }
 
         Optional<UserDTO> existUser = Optional.ofNullable(
                 userService.checkEmailAndPassWord(reqBody.getEmail(), reqBody.getPassword())
-                .orElseThrow(() -> new NotValidCredentialException("Invalid username or password.")));
+                        .orElseThrow(() -> new NotValidCredentialException("Invalid username or password.")));
 
         AuthToken authToken = userService.returnJWT(existUser);
 
@@ -123,5 +124,35 @@ public class UserController {
                 authToken), HttpStatus.OK);
     }
 
+    @PostMapping(path = "/signout")
+    public ResponseEntity<ResponseReturn> signOut(@RequestBody AuthToken authToken) {
+        userService.signOut(authToken);
+        return new ResponseEntity<>(new ResponseReturn(
+                LocalDateTime.now(),
+                "Sign out successfully.",
+                HttpStatus.OK.value(),
+                true,
+                null), HttpStatus.OK);
+    }
 
+    @PatchMapping(path = "/users/{userid}")
+    public ResponseEntity<ResponseReturn> changePassword(@PathVariable("userid") int userId,
+                                                         @Valid @RequestBody UserPassword reqBody,
+                                                         BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            return RequestBodyError.returnRequiredFields(bindingResult);
+        }
+
+        Optional<UserDTO> existUser = Optional.ofNullable(userService.getUser(userId)
+                .orElseThrow(() -> new NotFoundException("User not found")));
+
+        userService.changePassword(existUser, reqBody);
+
+        return new ResponseEntity<>(new ResponseReturn(
+                LocalDateTime.now(),
+                "Changed password for user " + userId,
+                HttpStatus.OK.value(),
+                true,
+                null), HttpStatus.OK);
+    }
 }
