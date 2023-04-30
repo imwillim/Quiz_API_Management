@@ -1,5 +1,4 @@
-
-package com.example.quiz_api_management.common;
+package com.example.quiz_api_management.configuration;
 
 import com.example.quiz_api_management.answer.Answer;
 import com.example.quiz_api_management.answer.AnswerRepository;
@@ -7,10 +6,14 @@ import com.example.quiz_api_management.question.Question;
 import com.example.quiz_api_management.question.QuestionRepository;
 import com.example.quiz_api_management.quiz.Quiz;
 import com.example.quiz_api_management.quiz.QuizRepository;
+import com.example.quiz_api_management.user.User;
+import com.example.quiz_api_management.user.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +21,7 @@ import java.util.List;
 public class QuizManagementConfiguration {
 
     @Bean
-    CommandLineRunner commandLineRunner(QuestionRepository questionRepository, AnswerRepository answerRepository, QuizRepository quizRepository) {
+    CommandLineRunner commandLineRunner(QuestionRepository questionRepository, AnswerRepository answerRepository, QuizRepository quizRepository, UserRepository userRepository) {
         return args -> {
 
             Quiz firstQuiz = new Quiz("Math 1", "15 minutes");
@@ -40,7 +43,6 @@ public class QuizManagementConfiguration {
 
             Question fifthQuestion = new Question("Is zero a natural number ?", "long", firstQuiz);
             Answer eighthAnswer = new Answer("Yes", true, fifthQuestion);
-            // second_question.setAnswers(List.of(fifth_answer));
 
             List<Question> questions = new ArrayList<>(List.of(firstQuestion, secondQuestion, thirdQuestion, fourthQuestion, fifthQuestion));
             List<Answer> answers = new ArrayList<>(List.of(firstAnswer, secondAnswer, thirdAnswer, fourthAnswer, fifthAnswer, sixthAnswer, seventhAnswer, eighthAnswer));
@@ -144,9 +146,21 @@ public class QuizManagementConfiguration {
             quizRepository.saveAll(List.of(firstQuiz, secondQuiz, thirdQuiz, fourthQuiz, fifthQuiz));
             questionRepository.saveAll(questions);
             answerRepository.saveAll(answers);
+
+
+            String encodedPassword = "12345";
+            String encodedPassword1 = "Hiphopboy120";
+            User user = new User("testuser1", "testuser1@gmail.com", encodedPassword, "aaaaa", "bbbbb", LocalDate.of(1999, 03, 03));
+            userRepository.save(user);
+            User user1 = new User("testuser2", "kkan@apcs.fitus.edu.vn", encodedPassword1, "aaaaa", "bbbbb", LocalDate.of(1999, 02, 02));
+            userRepository.save(user1);
         };
 
     }
 }
+
+
+
+
 
 
