@@ -31,7 +31,11 @@ public class QuizController {
     public ResponseEntity<PaginationReturn> paginateQuizzes(
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "sort", required = false) String sortQuery) {
-        if (sortQuery != null && !quizService.checkValidSortQuery(sortQuery))
+
+        if (sortQuery == null)
+            throw new NotValidParamsException("Query for sorting is null");
+
+        if (!quizService.checkValidSortQuery(sortQuery))
             throw new NotValidParamsException("Check query for sorting.");
 
         Page<QuizDTO> paginationQuiz = quizService.paginateQuizzes(page, sortQuery);
@@ -51,7 +55,7 @@ public class QuizController {
     }
 
     @GetMapping(path = "/quizzes/{quizid}")
-    public ResponseEntity<ResponseReturn> getQuiz(@RequestParam("quizid") int quizId){
+    public ResponseEntity<ResponseReturn> getQuiz(@PathVariable("quizid") int quizId){
         Optional<QuizDTO> quizDTO = Optional.ofNullable(quizService.getQuiz(quizId)
                 .orElseThrow(() -> new NotFoundException("Quiz not found")));
 

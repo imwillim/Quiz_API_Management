@@ -2,7 +2,14 @@ package com.example.quiz_api_management.user;
 
 
 import com.example.quiz_api_management.common.AuthToken;
+import com.example.quiz_api_management.util.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.*;
@@ -15,7 +22,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final UserDTOMapper userDTOMapper;
 
@@ -25,14 +32,19 @@ public class UserService {
         this.userDTOMapper = userDTOMapper;
     }
 
+
     public Optional<User> findDuplicateEmail(String email){
-        return userRepository.findByEmail(email);
+        return Optional.of(userRepository.findByEmail(email));
     }
 
     public Optional<UserDTO> checkEmailAndPassWord(String email, String password){
-        return userRepository
-                .findByEmailAndPassword(email, password)
-                .map(userDTOMapper);
+        String encodedPassword = userRepository.findByEmail(email).getPassword();
+        if (PasswordUtil.matches(password, encodedPassword))
+            return userRepository
+                    .findByEmailAndPassword(email, encodedPassword)
+                    .map(userDTOMapper);
+        else
+            return Optional.empty();
     }
 
     public List<UserDTO> getUsers(){
@@ -49,7 +61,7 @@ public class UserService {
         userRepository.save(newUser);
         return userRepository.findByEmailAndPassword(reqBody.getEmail(), reqBody.getPassword())
                 .stream().findAny()
-                .map(userDTOMapper).get();
+                .map(userDTOMapper).orElse(null);
     }
 
     public UserDTO updateUser(int userId, UserDTO reqBody){
@@ -60,7 +72,7 @@ public class UserService {
         user.setUpdatedAt(LocalDate.now());
         userRepository.save(user);
         Optional<User> newUser = userRepository.findById(userId);
-        return newUser.isPresent() ? newUser.map(userDTOMapper).get() : null;
+        return newUser.map(userDTOMapper).orElse(null);
     }
 
     public void deleteUser(int userId){
@@ -74,13 +86,10 @@ public class UserService {
                 .claim("User", existUser)
                 .setExpiration(Date.from(ZonedDateTime.now().plusMinutes(TWENTY_MINUTES).toInstant()))
                 .compact();
-        return new AuthToken(jwtToken, TWENTY_MINUTES *60);
+        return new AuthToken("JWT", jwtToken, TWENTY_MINUTES *60);
     }
 
-    public boolean checkJwt(AuthToken authToken){
-        Jws<Claims> jws = Jwts.parserBuilder().build().parseClaimsJws(authToken.getToken());
-        return !Objects.equals(jws, null);
-    }
+
 
     public void signOut(AuthToken authToken){
         int EXPIRED_SECOND = 0;
@@ -91,5 +100,54 @@ public class UserService {
         User user = userRepository.findById(existUser.get().getId()).get();
         user.setPassword(userPassword.getPassword());
         userRepository.save(user);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email);
+        if(user == null){
+            throw new UsernameNotFoundException("No User Found");
+        }
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                user.isEnabled(),
+                true,
+                true,
+                true,
+                user.getAuthorities()
+        );
+    }
+
+
+    public AuthToken getOAuth2Token(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String tokenType = ((OAuth2AccessToken) authentication).getTokenType().toString();
+        String accessToken = ((OAuth2AccessToken) authentication).getTokenValue();
+        long expiredTime = Objects.requireNonNull(((OAuth2AccessToken) authentication).getExpiresAt()).getEpochSecond();
+        return new AuthToken(tokenType, accessToken, expiredTime);
+    }
+
+    public void addRole(int userId, String role) {
+        Optional<User> user = userRepository.findById(userId);
+        user.ifPresent(value -> value.getRoles().add(role));
+    }
+
+    public boolean checkValidRole(String role){
+        role = role.toLowerCase();
+        String[] roles = new String[3];
+        roles[0] = "STUDENT".toLowerCase();
+        roles[1] = "TEACHER".toLowerCase();
+        roles[2] = "COORDINATOR".toLowerCase();
+        for (String existRole: roles){
+            if (role.equals(existRole)) return true;
+        }
+        return false;
+    }
+
+    // Method for removing a role from a user
+    public void removeRole(int userId, String role) {
+        Optional<User> user = userRepository.findById(userId);
+        user.ifPresent(value -> value.getRoles().remove(role));
     }
 }

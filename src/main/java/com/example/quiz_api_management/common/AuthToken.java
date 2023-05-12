@@ -6,6 +6,16 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class AuthToken {
+    private String tokenType;
+
     private String token;
-    private int expirationTime;
+
+    private long expirationTime;
+
+    public AuthToken(){
+
+    }
+
+
+
 }

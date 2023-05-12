@@ -5,6 +5,7 @@ import com.example.quiz_api_management.common.ResponseReturn;
 import com.example.quiz_api_management.exception.DuplicateException;
 import com.example.quiz_api_management.exception.NotFoundException;
 import com.example.quiz_api_management.exception.NotValidCredentialException;
+import com.example.quiz_api_management.exception.NotValidParamsException;
 import com.example.quiz_api_management.util.RequestBodyError;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,7 +106,8 @@ public class UserController {
     }
 
     @PostMapping(path = "/auth/signin")
-    public ResponseEntity<ResponseReturn> signIn(@Valid @RequestBody User reqBody, BindingResult bindingResult) {
+    public ResponseEntity<ResponseReturn> signInJWT(@Valid @RequestBody User reqBody,
+                                                    BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return RequestBodyError.returnRequiredFields(bindingResult);
         }
@@ -124,8 +126,8 @@ public class UserController {
                 authToken), HttpStatus.OK);
     }
 
-    @PostMapping(path = "/signout")
-    public ResponseEntity<ResponseReturn> signOut(@RequestBody AuthToken authToken) {
+    @PostMapping(path = "/auth/signout")
+    public ResponseEntity<ResponseReturn> signOutJWT(@RequestBody AuthToken authToken) {
         userService.signOut(authToken);
         return new ResponseEntity<>(new ResponseReturn(
                 LocalDateTime.now(),
@@ -154,5 +156,55 @@ public class UserController {
                 HttpStatus.OK.value(),
                 true,
                 null), HttpStatus.OK);
+    }
+
+
+    @GetMapping(path = "/oauth2/login")
+    public ResponseEntity<ResponseReturn> signInOAuth2(){
+        AuthToken authToken = userService.getOAuth2Token();
+        return new ResponseEntity<>(new ResponseReturn(
+                LocalDateTime.now(),
+                "Login successfully.",
+                HttpStatus.OK.value(),
+                true,
+                authToken), HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/users/{userid}/roles/{role}")
+    public ResponseEntity<ResponseReturn> addRole(@PathVariable("userid") int userId,
+                                                  @PathVariable("role") String role) {
+        userService.getUser(userId).orElseThrow(() -> new NotFoundException("User not found"));
+
+        if(!userService.checkValidRole(role))
+            throw new NotValidParamsException("Role does not exist");
+
+
+        userService.addRole(userId, role);
+        return new ResponseEntity<>(new ResponseReturn(
+                LocalDateTime.now(),
+                "Added new role successfully.",
+                HttpStatus.OK.value(),
+                true,
+                null), HttpStatus.OK);
+
+    }
+
+
+    @DeleteMapping(path = "/users/{userid}/roles/{role}")
+    public ResponseEntity<ResponseReturn> removeRole(@PathVariable("userid") int userId,
+                                                  @PathVariable("role") String role) {
+        userService.getUser(userId).orElseThrow(() -> new NotFoundException("User not found"));
+
+        if(!userService.checkValidRole(role))
+            throw new NotValidParamsException("Role does not exist");
+
+        userService.removeRole(userId, role);
+        return new ResponseEntity<>(new ResponseReturn(
+                LocalDateTime.now(),
+                "Added new role successfully.",
+                HttpStatus.NO_CONTENT.value(),
+                true,
+                null), HttpStatus.NO_CONTENT);
+
     }
 }
