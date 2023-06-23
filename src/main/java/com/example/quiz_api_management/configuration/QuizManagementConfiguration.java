@@ -149,10 +149,10 @@ public class QuizManagementConfiguration {
 
 
             String encodedPassword = "12345";
-            String encodedPassword1 = "Hiphopboy120";
+            String encodedPassword1 = "qwerty123";
             User user = new User("testuser1", "testuser1@gmail.com", encodedPassword, "aaaaa", "bbbbb", LocalDate.of(1999, 03, 03));
             userRepository.save(user);
-            User user1 = new User("testuser2", "kkan@apcs.fitus.edu.vn", encodedPassword1, "aaaaa", "bbbbb", LocalDate.of(1999, 02, 02));
+            User user1 = new User("testuser2", "testuser2@gmail.com", encodedPassword1, "aaaaa", "bbbbb", LocalDate.of(1999, 02, 02));
             userRepository.save(user1);
         };
 
