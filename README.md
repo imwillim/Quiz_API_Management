@@ -12,7 +12,9 @@ For building and running the application you need:
 
 - OAuth2
 
-- Lombok
+- Spring Data JPA
+
+- Spring Security
 
 - PostgreSQL
 
